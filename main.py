@@ -41,38 +41,22 @@ def optimal_strength_agility_split(max_points):
 
 
 if __name__ == '__main__':
-    x = []
-    y = []
-    ym = []
-    z = []
-    zm = []
-    m = []
     with Pool(10) as p:
-        r = list(tqdm(p.imap(optimal_strength_agility_split, range(1, 1001))))
+        results = list(tqdm(p.imap(optimal_strength_agility_split, range(1, 1001))))
 
-    print(r)
+    points_invested = []
+    strength_part = []
+    agility_part = []
+    for str_points, agi_points, mult in results:
+        points_invested.append(str_points + agi_points)
+        strength_part.append(mult * str_points / (str_points + agi_points))
+        agility_part.append(mult * agi_points / (str_points + agi_points))
 
-    for i in r:
-        x.append(i[0] + i[1])
-        y.append(i[0])
-        z.append(i[1])
-        m.append(i[2])
-        ym.append(i[2] * i[0] / (i[0] + i[1]))
-        zm.append(i[2] * i[1] / (i[0] + i[1]))
-
-    print(x)
-    print(y)
-    print(z)
-    print(m)
     fig, ax = plt.subplots()
-    ax.bar(x, ym, label='Strength')
-    ax.bar(x, zm, bottom=ym, label='Agility')
-    ax.set_ylabel('Damage multiplier')
-    ax.set_title('Best stat points repartition')
+    ax.bar(points_invested, strength_part, label='Strength')
+    ax.bar(points_invested, agility_part, bottom=strength_part, label='Agility')
+    ax.set_xlabel('Points Invested')
+    ax.set_ylabel('Damage Multiplier')
+    ax.set_title('Optimal Strength/Agility Split')
     ax.legend()
     plt.show()
-
-    ret = optimal_strength_agility_split(1780)
-    print(ret)
-    print(characteristic(ret[0]))
-    print(characteristic(ret[1]))
