@@ -42,7 +42,7 @@ def optimal_strength_agility_split(max_points):
 
 if __name__ == '__main__':
     with Pool(10) as p:
-        results = list(tqdm(p.imap(optimal_strength_agility_split, range(1, 1001))))
+        results = list(tqdm(p.imap(optimal_strength_agility_split, range(1, 1780))))
 
     points_invested = []
     strength_part = []
@@ -57,6 +57,6 @@ if __name__ == '__main__':
     ax.bar(points_invested, agility_part, bottom=strength_part, label='Agility')
     ax.set_xlabel('Points Invested')
     ax.set_ylabel('Damage Multiplier')
-    ax.set_title('Optimal Strength/Agility Split')
+    ax.set_title('Optimal Strength/Agility Split based purely on critical chance')
     ax.legend()
     plt.show()
